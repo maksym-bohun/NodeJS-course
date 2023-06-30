@@ -1,3 +1,4 @@
+/*
 const fs = require("fs");
 const server = require("http").createServer();
 
@@ -35,3 +36,28 @@ server.on("request", (req, res) => {
 server.listen(8000, "127.0.0.1", (err, res) => {
   console.log("Starting server");
 });
+ */
+
+const fs = require("fs");
+const zlib = require("zlib");
+
+const readStream = fs.createReadStream("./test-file.txt");
+const writeStream = fs.createWriteStream("./new-text.txt");
+const compressStream = zlib.createGzip();
+
+// readStream.on("data", (chunk) => {
+//   writeStream.write("\n------------------\n");
+//   writeStream.write(chunk);
+// });
+
+const handleError = () => {
+  console.log("Error!");
+  readStream.destroy();
+  writeStream.end("Finished with error...");
+};
+
+readStream
+  .on("error", handleError)
+  .pipe(compressStream)
+  .pipe(writeStream)
+  .on("error", handleError);
