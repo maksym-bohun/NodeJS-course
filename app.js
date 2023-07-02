@@ -4,6 +4,16 @@ const fs = require('fs');
 const app = express();
 app.use(express.json()); // express.json() - middleware
 
+app.use((req, res, next) => {
+  console.log('Hello from the middleware!🥳🤩');
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
 // app.get('/', (req, res) => {
 //   res.status(200).json({ message: 'Hello from the server!🥳', app: 'Natours' });
 // });
@@ -21,7 +31,12 @@ const tours = JSON.parse(
 const getAllTours = (req, res) => {
   res
     .status(200)
-    .json({ status: 'success', results: tours.length, data: { tours } });
+    .json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      results: tours.length,
+      data: { tours },
+    });
 };
 
 const getTour = (req, res) => {
