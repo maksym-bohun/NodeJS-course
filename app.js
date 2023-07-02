@@ -1,7 +1,12 @@
 const express = require('express');
 const fs = require('fs');
+const morgan = require('morgan');
+
+// 1. Middlewares
 
 const app = express();
+app.use(morgan('dev'));
+
 app.use(express.json()); // express.json() - middleware
 
 app.use((req, res, next) => {
@@ -14,29 +19,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.get('/', (req, res) => {
-//   res.status(200).json({ message: 'Hello from the server!🥳', app: 'Natours' });
-// });
-
-// app.post('/', (req, res) => {
-//   res.send('Posted!😌');
-// });
-
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-// GET
+// 2. Route handlers
 
 const getAllTours = (req, res) => {
-  res
-    .status(200)
-    .json({
-      status: 'success',
-      requestedAt: req.requestTime,
-      results: tours.length,
-      data: { tours },
-    });
+  res.status(200).json({
+    status: 'success',
+    requestedAt: req.requestTime,
+    results: tours.length,
+    data: { tours },
+  });
 };
 
 const getTour = (req, res) => {
@@ -128,6 +123,8 @@ const deleteTour = (req, res) => {
   );
 };
 
+// 3. Routes
+
 // app.get('/api/v1/tours', getAllTours);
 // app.get('/api/v1/tours/:id', getTour);
 // app.post('/api/v1/tours', createTour);
@@ -141,6 +138,7 @@ app
   .patch(updateTour)
   .delete(deleteTour);
 
+// 4. Start the server
 const port = 3000;
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
