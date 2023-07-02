@@ -178,5 +178,11 @@
     "active": true,
     "photo": "user-20.jpg",
     "password": "$2a$12$uA9FsDw63v6dkJKGlLQ/8ufYBs8euB7kqIQewyYlZXU5azEKeLEky"
+  },
+  {
+    "name": "Maks Bohun",
+    "email": "maks.boggun@gmail.com",
+    "role": "boss",
+    "password": "helloworld"
   }
 ]
