@@ -71,8 +71,15 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getUser = (req, res) => {};
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  console.log(req.user);
+  await User.findByIdAndUpdate(req.user.id, { active: false });
 
-exports.updateUser = (req, res) => {};
+  res.status(204).json({ status: 'success', data: null });
+});
 
-exports.deleteUser = (req, res) => {};
+exports.getUser = (req, res, next) => {};
+
+exports.updateUser = (req, res, next) => {};
+
+exports.deleteUser = (req, res, next) => {};
