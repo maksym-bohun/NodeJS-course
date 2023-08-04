@@ -2,6 +2,7 @@ const fs = require('fs');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const factory = require('./handlerFactory');
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -17,32 +18,11 @@ const users = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/users.json`)
 );
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    results: users.length,
-    data: { users },
-  });
-});
-
 exports.createUser = (req, res) => {
-  console.log(req.body);
-  const newUser = { ...req.body };
-  users.push(newUser);
-  fs.writeFile(
-    `${__dirname}/dev-data/data/users.json`,
-    JSON.stringify(users),
-    (err) => {
-      if (err) {
-        res.status(404).json({ status: 'fail', message: 'Error' });
-      }
-
-      res.status(200).json({ status: 'success', data: { user: newUser } });
-    }
-  );
+  res.status(500).json({
+    status: 'fail',
+    message: 'This route is not defined! Please use /signup instead.',
+  });
 };
 
 exports.updateMe = catchAsync(async (req, res, next) => {
@@ -78,8 +58,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   res.status(204).json({ status: 'success', data: null });
 });
 
-exports.getUser = (req, res, next) => {};
-
-exports.updateUser = (req, res, next) => {};
-
-exports.deleteUser = (req, res, next) => {};
+exports.getAllUsers = factory.getAll(User);
+exports.getUser = factory.getOne(User);
+exports.updateUser = factory.updateOne(User);
+exports.deleteUser = factory.deleteOne(User);
